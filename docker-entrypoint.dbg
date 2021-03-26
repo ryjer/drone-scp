@@ -1,6 +1,6 @@
 #!/bin/sh
-set -e
 
+set -e
 # 从环境变量读取 host 列表，导入 hosts 文件中备用
 echo ${PLUGIN_HOST} | sed "s/,/\n/g" > /scp/hosts
 
@@ -19,6 +19,28 @@ username=${PLUGIN_USERNAME}
 password=${PLUGIN_PASSWORD}
 is_rm=${PLUGIN_RM}
 
+echo "======== 变量列表 ========"
+echo "pwd: $PWD"
+echo "ls:"
+ls
+echo "port: $port"
+echo "username: $username"
+echo "password: $password"
+echo "is_rm: $is_rm"
+echo "host: ${PLUGIN_HOST}"
+echo "source: ${PLUGIN_SOURCE}"
+echo "target: ${PLUGIN_TARGET}"
+echo "======== 文件列表 ========"
+echo "/scp/hosts"
+cat /scp/hosts
+echo "/scp/source"
+cat /scp/source
+echo "/scp/target"
+cat /scp/target
+echo "src_dst"
+cat /scp/src_dst
+echo "=========================="
+
 # 添加目标主机 hash 指纹，防止接下来 scp 命令提示是否接受目标主机 HASH 公钥指纹
 ssh-keyscan -f /scp/hosts -p ${port}  >> ~/.ssh/known_hosts
 # 循环处理 scp 列表
@@ -26,6 +48,8 @@ ssh-keyscan -f /scp/hosts -p ${port}  >> ~/.ssh/known_hosts
 cat /scp/hosts | while read line
 do
     host=`echo $line | awk '{print $1}'`
+    # 添加目标主机 hash 指纹，防止接下来 scp 命令提示是否接受目标主机 HASH 公钥指纹
+    # ssh-keyscan -H $host >> ~/.ssh/known_hosts
     echo -e "================ Host: ${host} start ================"
    ## 内循环，源文件列表 和 目标文件列表，逐一进行匹配
     cat /scp/src_dst | while read line
