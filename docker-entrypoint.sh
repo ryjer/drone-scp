@@ -14,7 +14,7 @@ if [[ ! -e ${workdir} ]]; then
 fi
 # 2. ~/.ssh 目录
 if [[ ! -e ${HOME}/.ssh ]]; then
-    echo -e "\"${HOME}\/.ssh\" is not exist!  文件(夹) \"${HOME}\/.ssh\" 不存在！"
+    echo -e "\"${HOME}/.ssh\" is not exist!  文件(夹) \"${HOME}/.ssh\" 不存在！"
     exit 1  
 fi
 # 检查 环境变量完备性: 主机名host 端口port 用户名username 密码password 源文件source 目标文件target
