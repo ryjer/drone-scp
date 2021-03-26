@@ -1,9 +1,15 @@
 #!/bin/sh
 set -e
+# 简单错误处理函数
+function error_exit() {
+  echo "$1" 1>&2
+  exit 1
+}
 # 创建 所需文件目录环境
+workdir="/scp"
 # 1. 工作目录 /scp
-if [[ ! -e /scp ]]; then
-    echo -e "\"\/scp\" is not exist!  文件(夹) \"\/scp\" 不存在！"
+if [[ ! -e ${workdir} ]]; then
+    echo -e "\"${workdir}\" is not exist!  文件(夹) \"${workdir}\" 不存在！"
     exit 1
 fi
 # 2. ~/.ssh 目录
@@ -11,18 +17,23 @@ if [[ ! -e ${HOME}/.ssh ]]; then
     echo -e "\"${HOME}\/.ssh\" is not exist!  文件(夹) \"${HOME}\/.ssh\" 不存在！"
     exit 1  
 fi
-
+# 检查 环境变量完备性: 主机名host 端口port 用户名username 密码password 源文件source 目标文件target
+if [[ ! ${PLUGIN_HOST} ]] || [[ ! ${PLUGIN_PORT} ]]  || [[ ! ${PLUGIN_USERNAME} ]] || [[ ! ${PLUGIN_PASSWORD} ]] || [[ ! ${PLUGIN_SOURCE} ]] || [[ ! ${PLUGIN_TARGET} ]]; then
+    echo "\"host\" or \"port\" or \"username\" or \"password\" or \"source\" or \"target\" is not exist!"
+    echo "\"host\" 或 \"port\" 或 \"username\" 或 \"password\" 或 \"source\" 或 \"target\" 未定义！"
+    exit 1
+fi
 # 从环境变量读取 host 列表，导入 hosts 文件中备用
-echo ${PLUGIN_HOST} | sed "s/,/\n/g" > /scp/hosts || error_exit "\"host\" is not exist!  参数\"host\"未定义！"
+echo ${PLUGIN_HOST} | sed "s/,/\n/g" > ${workdir}/hosts 
 
 # 从环境变量读取 源文件 列表，导入 sources 文件
-echo ${PLUGIN_SOURCE} | sed "s/,/\n/g"  > /scp/source || error_exit "\"source\" is not exist!  参数\"source\"未定义！"
+echo ${PLUGIN_SOURCE} | sed "s/,/\n/g"  > ${workdir}/source 
 
 # 从环境变量读取 目标文件 列表，导入 targets 文件 
-echo ${PLUGIN_TARGET} | sed "s/,/\n/g"  > /scp/target || error_exit "\"target\" is not exist!  参数\"target\"未定义！"
+echo ${PLUGIN_TARGET} | sed "s/,/\n/g"  > ${workdir}/target 
 
 # 将源文件列表 和 目标文件列表合并
-paste /scp/source /scp/target > /scp/src_dst
+paste ${workdir}/source ${workdir}/target > ${workdir}/src_dst
 
 # 获取 PLUGIN_ 其他环境变量，并转换为本地变量格式
 port=${PLUGIN_PORT}
@@ -31,15 +42,15 @@ password=${PLUGIN_PASSWORD}
 is_rm=${PLUGIN_RM}
 
 # 添加目标主机 hash 指纹，防止接下来 scp 命令提示是否接受目标主机 HASH 公钥指纹
-ssh-keyscan -f /scp/hosts -p ${port}  >> ~/.ssh/known_hosts
+ssh-keyscan -f ${workdir}/hosts -p ${port}  >> ${HOME}/.ssh/known_hosts
 # 循环处理 scp 列表
 ## 外循环，主机列表 集群分发
-cat /scp/hosts | while read line
+cat ${workdir}/hosts | while read line
 do
     host=`echo $line | awk '{print $1}'`
     echo -e "================ Host: ${host} start ================"
    ## 内循环，源文件列表 和 目标文件列表，逐一进行匹配
-    cat /scp/src_dst | while read line
+    cat ${workdir}/src_dst | while read line
     do
         src=`echo $line | awk '{print $1}'`
         dst=`echo $line | awk '{print $2}'`
@@ -69,9 +80,3 @@ done
 echo "================================"
 printf "   All completed！ 全部完成！\n"
 echo "================================"
-
-# 简单错误处理函数
-function error_exit() {
-  echo "$1" 1>&2
-  exit 1
-}
