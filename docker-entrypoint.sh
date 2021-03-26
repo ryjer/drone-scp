@@ -1,14 +1,25 @@
 #!/bin/sh
 set -e
+# 创建 所需文件目录环境
+# 1. 工作目录 /scp
+if [[ ! -e /scp ]]; then
+    echo -e "\"\/scp\" is not exist!  文件(夹) \"\/scp\" 不存在！"
+    exit 1
+fi
+# 2. ~/.ssh 目录
+if [[ ! -e ${HOME}/.ssh ]]; then
+    echo -e "\"${HOME}\/.ssh\" is not exist!  文件(夹) \"${HOME}\/.ssh\" 不存在！"
+    exit 1  
+fi
 
 # 从环境变量读取 host 列表，导入 hosts 文件中备用
-echo ${PLUGIN_HOST} | sed "s/,/\n/g" > /scp/hosts
+echo ${PLUGIN_HOST} | sed "s/,/\n/g" > /scp/hosts || error_exit "\"host\" is not exist!  参数\"host\"未定义！"
 
 # 从环境变量读取 源文件 列表，导入 sources 文件
-echo ${PLUGIN_SOURCE} | sed "s/,/\n/g"  > /scp/source
+echo ${PLUGIN_SOURCE} | sed "s/,/\n/g"  > /scp/source || error_exit "\"source\" is not exist!  参数\"source\"未定义！"
 
 # 从环境变量读取 目标文件 列表，导入 targets 文件 
-echo ${PLUGIN_TARGET} | sed "s/,/\n/g"  > /scp/target
+echo ${PLUGIN_TARGET} | sed "s/,/\n/g"  > /scp/target || error_exit "\"target\" is not exist!  参数\"target\"未定义！"
 
 # 将源文件列表 和 目标文件列表合并
 paste /scp/source /scp/target > /scp/src_dst
@@ -34,19 +45,19 @@ do
         dst=`echo $line | awk '{print $2}'`
         echo -e "======== ${src} --> ${dst} ========"
        ## is_rm 判定，如果为 true ，递归删除目标文件（文件夹）
-        if [ $is_rm = "true" ]; then
+        if [[ $is_rm = "true" ]]; then
             sshpass -p ${password} ssh -p ${port} ${username}@${host} rm -rf ${dst}
             echo -e "remove \"${dst}\"  删除 \"${dst}\""
         fi
        ## 判断 源文件 或 文件夹 是否存在
-        if [ ! -e ${src} ]; then
+        if [[ ! -e ${src} ]]; then
             echo -e "\"${src}\" is not exist!  文件(夹) \"${src}\" 不存在！"
             exit 1
         fi
         # sshpass -p ${password} scp -C -v -r -P ${port} ${src} ${username}@${host}:${dst}
         sshpass -p ${password} scp -C -r -P ${port} ${src} ${username}@${host}:${dst}
        ## 根据 scp 执行结果进行反馈
-        if [ $? != 0 ]; then
+        if [[ $? != 0 ]]; then
             echo "======== ${src} --> ${dst}  ❌  failed!  失败！========"
             exit 1
         else
@@ -58,3 +69,9 @@ done
 echo "================================"
 printf "   All completed！ 全部完成！\n"
 echo "================================"
+
+# 简单错误处理函数
+function error_exit() {
+  echo "$1" 1>&2
+  exit 1
+}
