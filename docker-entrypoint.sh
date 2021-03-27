@@ -1,10 +1,6 @@
 #!/bin/sh
 set -e
-# 简单错误处理函数
-function error_exit() {
-  echo "$1" 1>&2
-  exit 1
-}
+
 # 创建 所需文件目录环境
 workdir="/scp"
 # 1. 工作目录 /scp
@@ -48,7 +44,7 @@ ssh-keyscan -f ${workdir}/hosts -p ${port}  >> ${HOME}/.ssh/known_hosts
 cat ${workdir}/hosts | while read line
 do
     host=`echo $line | awk '{print $1}'`
-    echo -e "================ Host: ${host} start ================"
+    echo  "================ Host: ${host} start ================"
    ## 内循环，源文件列表 和 目标文件列表，逐一进行匹配
     cat ${workdir}/src_dst | while read line
     do
@@ -77,6 +73,7 @@ do
     done
     echo "================ Host: ${host} successed ================"
 done
+
 echo "================================"
 printf "   All completed！ 全部完成！\n"
 echo "================================"

@@ -75,7 +75,7 @@ do
     host=`echo $line | awk '{print $1}'`
     # 添加目标主机 hash 指纹，防止接下来 scp 命令提示是否接受目标主机 HASH 公钥指纹
     # ssh-keyscan -H $host >> ~/.ssh/known_hosts
-    echo -e "================ Host: ${host} start ================"
+    echo  "================ Host: ${host} start ================"
    ## 内循环，源文件列表 和 目标文件列表，逐一进行匹配
     cat ${workdir}/src_dst | while read line
     do
@@ -104,6 +104,7 @@ do
     done
     echo "================ Host: ${host} successed ================"
 done
+
 echo "================================"
 printf "   All completed！ 全部完成！\n"
 echo "================================"
