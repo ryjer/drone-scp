@@ -3,7 +3,6 @@ Copy files using Drone CI.
 
 ![buildx](https://github.com/ryjer/drone-scp/workflows/buildx-latest/badge.svg)
 [![Docker Pulls](https://img.shields.io/docker/pulls/ryjer/drone-scp.svg)](https://hub.docker.com/r/ryjer/drone-scp/)
-[![micro badger](https://images.microbadger.com/badges/image/ryjer/drone-scp.svg)](https://microbadger.com/images/ryjer/drone-scp "Get your own image badge on microbadger.com")
 
 ## Usage
 ```bash
