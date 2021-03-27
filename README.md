@@ -26,12 +26,12 @@ Copy files using Drone CI.
 It is same as
 ```bash
 scp -r -P 22 ./hello.txt  root@example.com:/home/me/hello
-scp -r -P 22 hello        root@example:/var/hhi
-scp -r -P 22 src/t*       root@example:/root/src/
+scp -r -P 22 hello  root@example:/var/hhi
+scp -r -P 22 src/t*  root@example:/root/src/
 
-scp -r -P 22 ./hello.txt  root@10.0.0.1:/home/me/hello
-scp -r -P 22 hello        root@10.0.0.1:/var/hhi
-scp -r -P 22 src/t*       root@10.0.0.1:/root/src/
+scp -r -P 22 ./hello.txt root@10.0.0.1:/home/me/hello
+scp -r -P 22 hello root@10.0.0.1:/var/hhi
+scp -r -P 22 src/t* root@10.0.0.1:/root/src/
 ```
 
 ## 用法
@@ -59,12 +59,12 @@ scp -r -P 22 src/t*       root@10.0.0.1:/root/src/
 以上 drone step 对应的scp命令如下
 ```bash
 scp -r -P 22 ./hello.txt  root@example.com:/home/me/hello
-scp -r -P 22 hello        root@example:/var/hhi
-scp -r -P 22 src/t*       root@example:/root/src/
+scp -r -P 22 hello  root@example:/var/hhi
+scp -r -P 22 src/t*  root@example:/root/src/
 
 scp -r -P 22 ./hello.txt  root@10.0.0.1:/home/me/hello
-scp -r -P 22 hello        root@10.0.0.1:/var/hhi
-scp -r -P 22 src/t*       root@10.0.0.1:/root/src/
+scp -r -P 22 hello  root@10.0.0.1:/var/hhi
+scp -r -P 22 src/t*  root@10.0.0.1:/root/src/
 ```
 ### 参数说明
 **host 主机列表**：  用于表示传输的目标主机，支持多个主机，单这些主机的端口号(port)、用户名(username)、密码(password)必须相同
