@@ -2,7 +2,9 @@
 Copy files using Drone CI.
 
 ![buildx](https://github.com/ryjer/drone-scp/workflows/buildx-latest/badge.svg)
+[![Docker Stars](https://img.shields.io/docker/stars/ryjer/drone-scp.svg)](https://hub.docker.com/r/ryjer/drone-scp/)
 [![Docker Pulls](https://img.shields.io/docker/pulls/ryjer/drone-scp.svg)](https://hub.docker.com/r/ryjer/drone-scp/)
+[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 ## Usage
 ```bash
