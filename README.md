@@ -6,6 +6,7 @@ Copy files using Drone CI.
 [![Docker Pulls](https://img.shields.io/docker/pulls/ryjer/drone-scp.svg)](https://hub.docker.com/r/ryjer/drone-scp/)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
+**中文用法请下翻**
 ## Usage
 ```bash
   - name: scp files
@@ -39,7 +40,7 @@ scp -r -P 22 hello root@10.0.0.1:/var/hhi
 scp -r -P 22 src/t* root@10.0.0.1:/root/src/
 ```
 
-## 用法
+## 用法示例
 ```bash
   - name: scp 文件传输
     image: ryjer/drone-scp
@@ -61,7 +62,7 @@ scp -r -P 22 src/t* root@10.0.0.1:/root/src/
         - /var/hhi
         - /root/src/
 ```
-以上 drone step 对应的scp命令如下
+以上 drone step 等效的scp命令如下：
 ```bash
 scp -r -P 22 ./hello.txt  root@example.com:/home/me/hello
 scp -r -P 22 hello  root@example:/var/hhi
@@ -91,4 +92,4 @@ scp -r -P 22 src/t*  root@10.0.0.1:/root/src/
 
 本工具只支持从本地向远处主机传送文件，暂不支持从远程主机下载文件
 
-以上host source target 参数中不得存在逗号","。否则会因 drone 的传参机制和解析机制导致异常截断
+以上host source target 参数（文件名）中不得存在逗号"," 否则会因 drone 的传参机制和解析机制导致异常截断。相信没几个人会在文件名里用逗号吧！
