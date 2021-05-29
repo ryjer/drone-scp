@@ -8,9 +8,9 @@ on:
     branches: [ master ]
   schedule:
   # 每月27号，4:12 执行一次
-  #  - cron: '12 4 27 * *'
+    - cron: '12 4 27 * *'
   # 每周六，4:12 执行一次，以同步官方latest
-    - cron: '12 4 * * SAT'
+  # - cron: '12 4 * * SAT'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
